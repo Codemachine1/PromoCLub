@@ -1,0 +1,36 @@
+    type user{
+
+        name:String
+        prom:String
+        avatar:String
+        email:String
+        products:[product] @relation(name:"createdProducts")
+        reviews:[review] @relation
+        promotedproducts:[product] @relation(name:"usersThatPromotedProduct")
+        
+
+    }
+    type product{
+
+        name:String
+        description:String
+        elevator:String
+        reviews:[review] @relation
+        usersThatPromotedProduct:[user] @relation(name:"usersThatPromotedProduct")
+        
+        creator:user @relation(name:"createdProducts")
+        
+    }
+    type review{
+        text:String
+        rating:Int
+        user:user
+        product:product
+    }
+type Query{
+    allUsers:[user]
+    allProducts:[product]
+    getUserByEmail(email:String):user
+    
+}
+
