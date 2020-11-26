@@ -6,24 +6,36 @@
         email:String
         products:[product] @relation(name:"createdProducts")
         reviews:[review] @relation
-        promotedproducts:[product] @relation(name:"usersThatPromotedProduct")
-        
-
+        promotedproducts:[product] @relation(name:"usersThatPromotedProduct")        
+        cocreators:[ListPerson] @relation(name:"cocreators")
+        favoriteCreator:[ListPerson]@relation(name:"favoriteCreator")
     }
-    type product{
+    type ListPerson{
+        name:String
+        prom:String
+        avatar:String
+        email:String
+        refid:String
+        cocreators: user@relation(name:"cocreators")
+        favoriteCreator:user@relation(name:"favoriteCreator")
+    }
 
+
+    type product{
+        url:String
         name:String
         description:String
         elevator:String
         reviews:[review] @relation
         usersThatPromotedProduct:[user] @relation(name:"usersThatPromotedProduct")
-        
+        tags:[String]
         creator:user @relation(name:"createdProducts")
         
     }
     type review{
         text:String
         rating:Int
+        upticks:Int
         user:user
         product:product
     }

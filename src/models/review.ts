@@ -7,6 +7,7 @@ interface IReview extends Document{
     rating:number
     user:IUser
     product:IProduct
+    upticks:number
 
 }
 

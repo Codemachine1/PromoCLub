@@ -32,7 +32,7 @@ function Product() {
         <h1>New Creation</h1>
         <ToastContainer />
         <Formik
-          initialValues={{ name: '', description: '', elevator: '' }}
+          initialValues={{ name: '', description: '',url:"", elevator: '' }}
           onSubmit={(values, { setSubmitting }) => {
             async function createProduct() {
               try {
@@ -50,6 +50,7 @@ function Product() {
                   {
                     product: {
                       name: values.name,
+                      url:values.url,
                       description: values.description,
                       elevator: values.elevator,
                       reviews: {
@@ -91,6 +92,11 @@ function Product() {
             <Field
               name="elevator"
               label="elevator pitch"
+              component={TextareaField.Formik}
+            />
+            <Field
+              name="url"
+              label="Url to store page or product site"
               component={TextareaField.Formik}
             />
             <Field

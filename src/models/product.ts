@@ -8,6 +8,7 @@ interface IProduct extends Document{
   elevator:string
   reviews:IReviewData
   user:IUser
+  url:String
 }
 interface IReviewData{
   data:IReview[]

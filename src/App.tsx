@@ -24,6 +24,7 @@ function App({}: AppProps) {
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
   if (isAuthenticated && userDetails == null) {
     const { name, picture, email } = useAuth0().user;
+    console.log(picture)
     usersEmail = email;
     usersPicture = picture;
     usersName = name;
@@ -37,6 +38,13 @@ function App({}: AppProps) {
               _id
               name
               email
+              favoriteCreator{
+                data{
+                  _id
+                  name
+                }
+              }
+
             }
           }
         `,
@@ -94,9 +102,12 @@ function App({}: AppProps) {
             <Link href="/products">
               <TopNav.Item href="/products">products</TopNav.Item>
             </Link>
+            {isAuthenticated ? (
             <Link href="/new">
               <TopNav.Item href="/new">new</TopNav.Item>
-            </Link>
+            </Link>): (
+              <></>)
+            }
           </TopNav.Section>
           <TopNav.Section>
             {!isAuthenticated ? (

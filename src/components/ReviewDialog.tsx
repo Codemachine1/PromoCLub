@@ -4,15 +4,15 @@ import { InputField, Textarea, TextareaField } from 'bumbag';
 import { Formik, Form, Field } from 'formik';
 import graphQLClient from '../utilities/client';
 import { gql } from 'graphql-request';
-import type {IReview} from "../models/review"
+import type {IProduct} from "../models/product"
 interface ReviewProps {
   userid: String;
   productid: String;
-  reviews:IReview[]
+  product:IProduct
   callback:Callback
 }
 interface Callback{
-    (reviews:IReview[]):void
+    (product:IProduct):void
 }
 
 export default function ReviewDialog(props: ReviewProps) {
@@ -50,8 +50,9 @@ export default function ReviewDialog(props: ReviewProps) {
                   }
               );
               console.log(response);
-              var data=props.reviews
-              data.push(response.createReview)
+              var data:IProduct=props.product
+              data.reviews
+              data.reviews.data.push(response.createReview)
               props.callback(data)
               setSubmitting(false);
               
@@ -61,14 +62,14 @@ export default function ReviewDialog(props: ReviewProps) {
         >
           <Form>
             <Field name="text" label="review" component={Textarea.Formik} />
-            <Rating onChange={(value) => setRating(value)} value={rating} />
+            <Rating onChange={()=>{}} value={rating} />
             <Button palette="primary" type="submit">
               Submit{' '}
             </Button>
           </Form>
         </Formik>
       </Dialog.Modal>
-      <Modal.Disclosure use={Button}>Review</Modal.Disclosure>
+      <Modal.Disclosure alignX="right" use={Button}>Review</Modal.Disclosure>
     </Modal.State>
   );
 }

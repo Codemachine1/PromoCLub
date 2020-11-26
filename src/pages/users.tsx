@@ -4,7 +4,11 @@ import { Link, Route } from 'wouter';
 import type { IUser } from 'src/models/user';
 import { Container, Col, Row, Form, Spinner } from 'react-bootstrap';
 import Avatar from 'react-avatar';
+import AnimateOnScroll from '../components/AnimateOnScroll';
+import AnimateOnMouseOver from '../components/AnimateOnMouseOver';
+
 import { gql, request } from 'graphql-request';
+
 interface response {
   allUsers: allUsers;
 }
@@ -53,9 +57,9 @@ export default function products() {
     }
     getProducts();
   }, [searchTerm]);
-  console.log("test",users)
+  console.log('test', users);
   if (users == undefined && users == null) {
-    console.log("loading")
+    console.log('loading');
     return (
       <div style={{ padding: '50%' }}>
         <Spinner animation="border" role="status">
@@ -64,7 +68,7 @@ export default function products() {
       </div>
     );
   } else {
-    console.log("showing content")
+    console.log('showing content', users);
     return (
       <Container>
         <Row>
@@ -81,15 +85,22 @@ export default function products() {
           <ul className="list-unstyled">
             {users.map((user: IUser) => {
               return (
-                <Link href={`/user/${user._id}`}>
-                  <li className="media">
-                    <Avatar name="Foo Bar" />
-                    <div className="media-body">
-                      <h5 className="mt-0 mb-1">{user.name}</h5>
-                      {user.prom}
-                    </div>
-                  </li>
-                </Link>
+                <AnimateOnScroll>
+                  <AnimateOnMouseOver>
+                    <Link href={`/user/${user._id}`}>
+                      <li className="media" key={`user-${user._id}`}>
+                        <Avatar
+                          name={user.name.toString()}
+                          src={user.avatar.toString()}
+                        />
+                        <div className="media-body">
+                          <h5 className="mt-0 mb-1">{user.name}</h5>
+                          {user.prom}
+                        </div>
+                      </li>
+                    </Link>
+                  </AnimateOnMouseOver>
+                </AnimateOnScroll>
               );
             })}
           </ul>

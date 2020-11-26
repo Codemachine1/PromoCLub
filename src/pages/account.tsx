@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { Link, Route } from 'wouter';
 import type { IUser } from '../models/user';
 import Avatar from 'react-avatar';
 import graphQLClient from '../utilities/client';
@@ -12,7 +13,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import LoggedInUser from '../state/LoggedInUser';
 import { Formik, Form, Field } from 'formik';
-import { Textarea, TextareaField } from 'bumbag';
+import { Textarea, TextareaField, Card, Columns } from 'bumbag';
 interface response {
   findUserByID: IUser;
 }
@@ -43,7 +44,29 @@ function Account() {
                 data {
                   text
                   rating
+                  user {
+                    _id
+                    name
+                  }
                 }
+              }
+              cocreators {
+                data{
+                  _id
+                  name
+                  avatar
+                  refid
+                }
+
+              }
+              favoriteCreator {
+                data{
+                  _id
+                  name
+                  avatar
+                  refid
+                }
+
               }
               promotedproducts {
                 data {
@@ -73,15 +96,82 @@ function Account() {
         </Row>
         <Row>
           <Col>
-            <Avatar />
+            <Avatar name={User.name.toString()} src={User.avatar.toString()} />
           </Col>
           <Col>
-            <Formik initialValues={{ promo: User.prom }} onSubmit={(data) => {}}>
+            <Formik
+              initialValues={{ promo: User.prom }}
+              onSubmit={(data) => {}}
+            >
               <Form>
-                <Field name="promo" label="your promotion" components={TextareaField.Formik}/>
+                <Field
+                  name="promo"
+                  label="your promotion"
+                  components={TextareaField.Formik}
+                />
               </Form>
             </Formik>
           </Col>
+        </Row>
+        <Row>
+          <h2>Your Favorite Creators</h2>
+        </Row>
+
+        <Row>{
+        User.favoriteCreator.data.length<1?(
+          <ul className="unstyled-list">
+            {User.favoriteCreator.data.map((user: IUser) => {
+            console.log(user)
+              return (
+                <Link href={`/user/${user.refid}`}>
+                  <li className="media">
+                  <Avatar name={User.name.toString()} src={User.avatar.toString()} />
+                    <div className="media-body">
+                      <h5 className="mt-0 mb-1">{user.name}</h5>
+                      {user.prom}
+                    </div>
+                  </li>
+                </Link>
+              );
+            })}
+          </ul>):(
+            <p> you have not favorited any creators</p>
+          )
+        }
+        </Row>
+
+        <Row>
+          <h2>Your Favorite CoCreators</h2>
+        </Row>
+
+        <Row>
+          {
+        User.cocreators.data.length<1?(
+          <ul className="unstyled-list">
+            {
+            User.cocreators.data.map((user: IUser) => {
+              console.log(user)
+              return (
+                <Link href={`/user/${user.refid}`}>
+                  <li className="media">
+                    <Avatar name={user.name} />
+                    <div className="media-body">
+                      <h5 className="mt-0 mb-1">{user.name}</h5>
+                      {user.prom}
+                    </div>
+                  </li>
+                </Link>
+              );
+            })
+          }
+          </ul>):(
+            <p> you have no cocreators</p>
+          )
+        }
+        </Row>
+
+        <Row>
+          <ReviewList reviews={User.reviews} />
         </Row>
         <Row>
           <h2>Your Reviews</h2>
